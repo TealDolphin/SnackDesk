@@ -22,7 +22,13 @@ if($action == 'submitStudent'){
 	echo '<form onsubmit=""><h3>Snack Bar Purchase</h3><imput type="text"><br><p>Hot Lunch Purchase</p><imput type="text" id=""><input type="submit" value="Purchase"></form>';
 }
 
-
+if($action == 'pay'){
+	if(){
+		
+	}else{
+		echo
+	}
+}
 
 /*
 function f($var){
