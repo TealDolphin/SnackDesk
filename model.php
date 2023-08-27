@@ -129,6 +129,22 @@
 		return 'No parents found for this student.';
 	}
 	
+	public function parentsList(){
+		$l = array();
+		$i = 0;
+		
+		$command = "SELECT DISTINCT parent FROM people";
+		$stmt->$this->DB->prepare($command);
+		
+		$stmt->execute();
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		// may be wrong. don't remember single item returns exactly
+		foreach($arr as $row){$l[$i++] = $row['parent'];}
+		
+		return $l;
+	}
+	
 	public function assignParent($std, $par){
 		$par = htmlspecialchars(trim($par));
 		$std = htmlspecialchars(trim($std));
