@@ -19,8 +19,22 @@ if($action == 'submitStudent'){
 		exit();
 	}
 	$_SESSION['std'] = $ID;
-	echo '<form onsubmit=""><h3>Snack Bar Purchase</h3><imput type="text"><br><p>Hot Lunch Purchase</p><imput type="text" id=""><input type="submit" value="Purchase"></form>';
+	$par = retrieveParent($std);
+
+	if($par == ''){
+		$allP = parList();
+		$options = '<>';
+		foreach($allP as $p){
+			$options = $options . '<>' . $p . '</>';
+		}
+		$options = $options . '</>';
+		echo '' . $options . '';
+		exit();
+	}else{
+	$bal = retrieveBal($par);
+	echo '<h3>Snack Bar Purchase</h3><div><p>Account Info:</p> <p>Name: ' . $par . '</p> <p>Balance: $' . $bal . '</p> </div><form onsubmit="javascript" ="purchase()"><imput type="text"><br><p>Hot Lunch Purchase</p><imput type="text" id=""><input type="submit" value="Purchase"></form>';
 	exit();
+	}
 }
 
 if($action == 'pay'){
