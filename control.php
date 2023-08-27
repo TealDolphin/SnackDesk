@@ -23,10 +23,16 @@ if($action == 'submitStudent'){
 }
 
 if($action == 'pay'){
-	if(){
-		
+	if(isset($snack) && isset($hotlunch) && isset($_SESSION['std'])){
+		$par = retrieveParent($_SESSION['std']);
+		if($snack < 0 || $hotlunch < 0){
+			throw new Exception('Invalid value error.');
+		}
+		if(($snack + $hotlunch) > retrieveMoney($par)){
+			throw new Exception('Isufficient funds error.');
+		}
 	}else{
-		echo
+		throw new Exception('Invalid access error.');
 	}
 }
 
