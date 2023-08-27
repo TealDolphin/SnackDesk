@@ -20,6 +20,7 @@ if($action == 'submitStudent'){
 	}
 	$_SESSION['std'] = $ID;
 	echo '<form onsubmit=""><h3>Snack Bar Purchase</h3><imput type="text"><br><p>Hot Lunch Purchase</p><imput type="text" id=""><input type="submit" value="Purchase"></form>';
+	exit();
 }
 
 if($action == 'pay'){
@@ -31,6 +32,7 @@ if($action == 'pay'){
 		if(($snack + $hotlunch) > retrieveMoney($par)){
 			throw new Exception('Isufficient funds error.');
 		}
+		exit();
 	}else{
 		throw new Exception('Invalid access error.');
 	}
