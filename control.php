@@ -40,15 +40,19 @@ if($action == 'submitStudent'){
 if($action == 'pay'){
 	if(isset($snack) && isset($hotlunch) && isset($_SESSION['std'])){
 		$par = retrieveParent($_SESSION['std']);
-		if($snack < 0 || $hotlunch < 0){
+		if($par == 'No parents found for this student.'){
+			throw new Exception('Invalid student error.');
+		}elseif($snack < 0 || $hotlunch < 0){
 			throw new Exception('Invalid value error.');
-		}
-		if(($snack + $hotlunch) > retrieveMoney($par)){
+		}elseif(($snack + $hotlunch) > retrieveMoney($par)){
 			throw new Exception('Isufficient funds error.');
 		}
 
-		;
-		
+		purchase($_SESSION['std'], $snack, $hotlunch);
+		$o = '';
+		if($snack > 0){$o = $o . '<p>Purchased snacks worth $' . $snack . ' from the snack bar.</p>';}
+		if($hotlunch > 0){$o = $o . '<p>Purchased hot lunch(es) worth $' . $hotlunch . ' from the snack bar.</p>';}
+		echo $o . $mainPage;
 		exit();
 	}else{
 		throw new Exception('Invalid access error.');
