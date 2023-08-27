@@ -46,6 +46,9 @@ if($action == 'pay'){
 		if(($snack + $hotlunch) > retrieveMoney($par)){
 			throw new Exception('Isufficient funds error.');
 		}
+
+		;
+		
 		exit();
 	}else{
 		throw new Exception('Invalid access error.');
