@@ -13,8 +13,10 @@ $_SESSION['state'] = 'ready';
 ?>
 <div id='main'></div>
 <script type="text/javascript" href="template.js">
+
+var page = document.getElementById('main');
+
 function callState(){
-	var page = document.getElementById('main');
 	var fill = '<div style="display: none">Debug</div>';
 	
 	//ajax.open("GET","control.php?login=yes&name=" + username + "&pwd=" + document.getElementById("pwd").value);
@@ -23,16 +25,35 @@ function callState(){
     
     ajax.onreadystatechange = function(){
         if(ajax.readyState == 4 && ajax.status == 200){
-            var output = ajax.responseText;
-            if(output == "Succsessful login attempt."){
-                
-            }
-            document.getElementById("message").value
+            var fill = ajax.responseText;
         }
     };
 	
 	page.innerHTML = fill;
 }
+
+function submitStudent(){
+	stdId = document.getElementById('stdInput').innerHTML;
+	if (stdId.length == 10 && /^[0-9]{10}$/.test(stdId)){
+		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId);
+		ajax.send();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4 && ajax.status == 200){
+				var output = ajax.responseText;
+				if(output == "Succsessful login attempt."){
+					
+				}
+				document.getElementById("message").value
+			}
+		};
+		page.innerHTML = fill;
+	}else{
+		alert('Invalid student ID, please rescan to try again.');
+	}
+}
+
+
 callState();
 </script>
 </body>
