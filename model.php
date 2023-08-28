@@ -32,6 +32,8 @@
 	
 	// assumed that most of the time there will be multiple students per parent, but that is easy to reverse lookup if needed.
 	
+	// all money is in cents. convert before/after calling functions
+	
 */
 
 	public function addMoney($parent, $value){
@@ -133,7 +135,7 @@
 		$l = array();
 		$i = 0;
 		
-		$command = "SELECT DISTINCT parent FROM people";
+		$command = "SELECT DISTINCT parent FROM money ORDER BY parent ASC";
 		$stmt->$this->DB->prepare($command);
 		
 		$stmt->execute();
@@ -160,8 +162,17 @@
 		}
 	}
 	
+	public function addParent($par){
+		$par = htmlspecialchars(trim($par));
+		
+		$command = "INSERT INTO money (parent, currentMoney) VALUES (:p, 0)";
+		$stmt->$this->DB->prepare($command);
+		$stmt->bindParam(":p", $par, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 	
-	public function retrieveValue($par){
+	
+	public function retrieveBal($par){
 		$par = htmlspecialchars(trim($par));
 		
 		
