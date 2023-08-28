@@ -25,15 +25,15 @@ function callState(){
     
     ajax.onreadystatechange = function(){
         if(ajax.readyState == 4 && ajax.status == 200){
-            var fill = ajax.responseText;
+            page.innerHTML = ajax.responseText;
         }
     };
 	
-	page.innerHTML = fill;
+	//page.innerHTML = fill;
 }
 
 function submitStudent(){
-	stdId = document.getElementById('stdInput').innerHTML;
+	var stdId = document.getElementById('stdInput').innerHTML;
 	if (stdId.length == 10 && /^[0-9]{10}$/.test(stdId)){
 		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId);
 		ajax.send();
@@ -51,6 +51,38 @@ function submitStudent(){
 	}else{
 		alert('Invalid student ID, please rescan to try again.');
 	}
+}
+
+function assignStudent(){
+	var par = document.getElementById('parents').value;
+	var newP = document.getElementById('newPar').innerHTML;
+	if(par == "newParent"){
+		ajax.open("GET", "control.php?action=assignParent&new=" + newP + "&par=" + newP);
+		ajax.send();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4 && ajax.status == 200){
+				var output = ajax.responseText;
+				if(output == "Succsessful login attempt."){
+					
+				}
+				document.getElementById("message").value
+			}
+		};
+	}
+	
+	ajax.open("GET", "control.php?action=assignParent&par=" + par);
+		ajax.send();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4 && ajax.status == 200){
+				var output = ajax.responseText;
+				if(output == "Succsessful login attempt."){
+					
+				}
+				document.getElementById("message").value
+			}
+		};
 }
 
 
