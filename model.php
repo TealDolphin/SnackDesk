@@ -129,7 +129,7 @@ require_once "rebuildSQL.php";
 		$std = htmlspecialchars(trim($std));
 		
 		$command = "SELECT * FROM people WHERE student = :s";
-		$stmt->$this->DB->prepare($command);
+		$stmt = $this->DB->prepare($command);
 		$stmt->bindParam(":s", $std, PDO::PARAM_STR);
 		
 		$stmt->execute();
@@ -146,7 +146,7 @@ require_once "rebuildSQL.php";
 		$i = 0;
 		
 		$command = "SELECT DISTINCT parent FROM money ORDER BY parent ASC";
-		$stmt->$this->DB->prepare($command);
+		$stmt = $this->DB->prepare($command);
 		
 		$stmt->execute();
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -163,9 +163,9 @@ require_once "rebuildSQL.php";
 		
 		// As is you can assign an id to a parent and can't change it.
 		// Unsure if should leave it or if should make it so it overrides.
-		if(retrieveParent($std) == 'No parents found for this student.'){		
+		if($this->retrieveParent($std) == 'No parents found for this student.'){		
 			$command = "INSERT INTO people (student, parent) VALUES (:s, :p)";
-			$stmt->$this->DB->prepare($command);
+			$stmt = $this->DB->prepare($command);
 			$stmt->bindParam(":s", $std, PDO::PARAM_STR);
 			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
 			$stmt->execute();
@@ -176,7 +176,7 @@ require_once "rebuildSQL.php";
 		$par = htmlspecialchars(trim($par));
 		
 		$command = "INSERT INTO money (parent, currentMoney) VALUES (:p, 0)";
-		$stmt->$this->DB->prepare($command);
+		$stmt = $this->DB->prepare($command);
 		$stmt->bindParam(":p", $par, PDO::PARAM_STR);
 		$stmt->execute();
 	}
@@ -187,7 +187,7 @@ require_once "rebuildSQL.php";
 		
 		
 		$command = "SELECT * FROM money WHERE parent = :p";
-		$stmt->$this->DB->prepare($command);
+		$stmt = $this->DB->prepare($command);
 		$stmt->bindParam(":p", $par, PDO::PARAM_STR);
 		
 		$stmt->execute();
@@ -198,7 +198,7 @@ require_once "rebuildSQL.php";
 		}
 		
 		$command = "INSERT INTO money (parent, currentMoney) VALUES (:p, 0)";
-		$stmt->$this->DB->prepare($command);
+		$stmt = $this->DB->prepare($command);
 		$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
 		$stmt->execute();
 		
