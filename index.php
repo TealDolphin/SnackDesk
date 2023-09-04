@@ -14,11 +14,12 @@ $_SESSION['state'] = 'ready';
 <div id='main'></div>
 <script type="text/javascript" href="template.js">
 
-var page = document.getElementById('main');
+let page = document.getElementById('main');
 
 function callState(){
-	var ajax = new XMLHttpRequest();
-	var fill = '<div style="display: none">Debug</div>';
+	let ajax = new XMLHttpRequest();
+	
+	let fill = '<div style="display: none">Debug</div>';
 	
 	//ajax.open("GET","control.php?login=yes&name=" + username + "&pwd=" + document.getElementById("pwd").value);
 	ajax.open("GET", "control.php?action=load");
@@ -34,8 +35,9 @@ function callState(){
 }
 
 function submitStudent(){
-	var ajax = new XMLHttpRequest();
-	var stdId = document.getElementById('stdInput');
+	let ajax = new XMLHttpRequest();
+	
+	let stdId = document.getElementById('stdInput');
 	
 	if (/^[0-9]{10}$/.test(stdId.value)){
 		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId.value);
@@ -54,9 +56,10 @@ function submitStudent(){
 }
 
 function assignStudent(){
-	var ajax = new XMLHttpRequest();
-	var par = document.getElementById('parents').value;
-	var newP = document.getElementById('newPar').value;
+	let ajax = new XMLHttpRequest();
+	
+	let par = document.getElementById('parents').value;
+	let newP = document.getElementById('newPar').value;
 	
 	if(par == "newParent"){
 		ajax.open("GET", "control.php?action=assignParent&new=" + newP + "&par=" + par);
@@ -77,6 +80,39 @@ function assignStudent(){
 			}
 		};
 	}
+}
+
+function pay(){
+	let ajax = new XMLHttpRequest();
+	
+	let bal = document.getElementById('bal').value;
+	let snk = document.getElementById('snk').value;
+	let hotl = document.getElementById('hotl').value;
+	
+	if(snk === ""){snk = 0;}
+	if(hotl === ""){hotl = 0;}
+	
+	
+	if(snk < 0 || hotl < 0){
+		alert("no");
+		return;
+	}
+	
+	//alert(bal + "-" + snk + "-" + hotl);
+	
+	if((snk + hotl) <= bal){
+		ajax.open("GET", "control.php?action=pay&snack=" + snk + "&hotlunch=" + hotl);
+		ajax.send();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4 && ajax.status == 200){
+				page.innerHTML = ajax.responseText;
+			}
+		};
+	}else{
+		alert("Insufficient Funds.");
+	}
+	
 }
 
 
