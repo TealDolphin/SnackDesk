@@ -1,13 +1,23 @@
 <?php
 
-require_once model.php;
+require_once "model.php";
+require_once "JotForm.php";
 
 
-$f = fopen('%USERPROFILE%\\Downloads\\TODO.example', 'r') or die("Unable to open file!");
+$jotformAPI = new JotForm("YOUR API KEY");
+$forms = $jotformAPI->getForms(0, 1, null, null);
 
 
+$par = parentsList();
 
-
+foreach($forms as $arr){
+	if(in_array($forms[0],$arr)){
+		addMoney($forms[0],$forms[1]);
+	}else{
+		addParent($forms[0]);
+		addMoney($forms[0],$forms[1]);
+	}
+}
 
 
 
