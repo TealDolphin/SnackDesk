@@ -35,23 +35,20 @@ function callState(){
 
 function submitStudent(){
 	var ajax = new XMLHttpRequest();
-	var stdId = document.getElementById('stdInput').innerHTML;
+	var stdId = document.getElementById('stdInput');
 	
-	if (stdId.length == 10 && /^[0-9]{10}$/.test(stdId)){
-		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId);
+	if (/^[0-9]{10}$/.test(stdId.value)){
+		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId.value);
 		ajax.send();
 		
 		ajax.onreadystatechange = function(){
 			if(ajax.readyState == 4 && ajax.status == 200){
-				var output = ajax.responseText;
-				if(output == "Succsessful login attempt."){
-					
-				}
-				document.getElementById("message").value
+				page.innerHTML = ajax.responseText;
 			}
 		};
-		page.innerHTML = fill;
 	}else{
+		//alert("-" + stdId.value + "-");
+		stdId.value = "";
 		alert('Invalid student ID, please rescan to try again.');
 	}
 }
@@ -59,35 +56,27 @@ function submitStudent(){
 function assignStudent(){
 	var ajax = new XMLHttpRequest();
 	var par = document.getElementById('parents').value;
-	var newP = document.getElementById('newPar').innerHTML;
+	var newP = document.getElementById('newPar').value;
 	
 	if(par == "newParent"){
-		ajax.open("GET", "control.php?action=assignParent&new=" + newP + "&par=" + newP);
+		ajax.open("GET", "control.php?action=assignParent&new=" + newP + "&par=" + par);
 		ajax.send();
 		
 		ajax.onreadystatechange = function(){
 			if(ajax.readyState == 4 && ajax.status == 200){
-				var output = ajax.responseText;
-				if(output == "Succsessful login attempt."){
-					
-				}
-				document.getElementById("message").value
+				page.innerHTML = ajax.responseText;
+			}
+		};
+	} else {
+		ajax.open("GET", "control.php?action=assignParent&par=" + par);
+		ajax.send();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4 && ajax.status == 200){
+				page.innerHTML = ajax.responseText;
 			}
 		};
 	}
-	
-	ajax.open("GET", "control.php?action=assignParent&par=" + par);
-		ajax.send();
-		
-		ajax.onreadystatechange = function(){
-			if(ajax.readyState == 4 && ajax.status == 200){
-				var output = ajax.responseText;
-				if(output == "Succsessful login attempt."){
-					
-				}
-				document.getElementById("message").value
-			}
-		};
 }
 
 
