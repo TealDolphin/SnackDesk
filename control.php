@@ -7,7 +7,7 @@ multi line comment
 require_once "model.php";
 session_start();
 
-static $mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput"></form></div>';
+static $mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput" pattern="^[0-9]{10}$"></form></div>';
 
 // inital load and anytime i would like to kick back inital page quickly
 if($_GET['action'] == 'load'){
@@ -55,15 +55,19 @@ if($_GET['action'] == 'submitStudent'){
 		echo '' . $options . '<br><br><label for="newPar">Assign to new parent:</label><input type="text" id="newPar"><br><br><input type="submit" value="Submit"></form>';
 		exit();
 	}else{
-	$bal = $theDBA->retrieveBal($par);
-	echo '<h3>Snack Bar Purchase</h3><div><p>Account Info:</p> <p>Name: ' . $par . '</p> <p>Balance: $' . $bal . '</p> </div><form onsubmit="javascript" ="purchase()"><input type="text"><br><p>Hot Lunch Purchase</p><input type="text" id=""><input type="submit" value="Purchase"></form>';
+	$bal = ($theDBA->retrieveBal($par))/100;
+	echo '<h3>Snack Bar Purchase</h3><div><p>Account Info:</p> <p>Name: ' . $par . '</p> <p>Balance: $' . $bal . '</p> <input id="bal" value="' . $bal . '" hidden> </div><form action="javascript:;" onsubmit="pay()"><input id="snk" pattern="^[0-9]*\.?[0-9]*$" type="text"><br><p>Hot Lunch Purchase</p><input type="text" id="hotl" pattern="^[0-9]*\.?[0-9]*$"><input type="submit" value="Purchase"></form>';
 	exit();
 	}
 }
 
 if($_GET['action'] == 'pay'){
+	//echo "asdfkjhl;asdfuhkilaew";
 	if(isset($_GET['snack']) && isset($_GET['hotlunch']) && isset($_SESSION['std'])){
 		$par = $theDBA->retrieveParent($_SESSION['std']);
+		
+		//$TODO =  $_GET['snack'] . '-' . $_GET['hotlunch'] . '-' . $_SESSION['std'];
+		
 		
 		// convert to cents for database use
 		$snack = intval($_GET['snack']*100);
@@ -73,7 +77,7 @@ if($_GET['action'] == 'pay'){
 			throw new Exception('Invalid student error.');
 		}elseif($snack < 0 || $hotlunch < 0){
 			throw new Exception('Invalid value error.');
-		}elseif(($snack + $hotlunch) > retrieveMoney($par)){
+		}elseif(($snack + $hotlunch) > $theDBA->retrieveBal($par)){
 			throw new Exception('Isufficient funds error.');
 		}
 
@@ -81,7 +85,11 @@ if($_GET['action'] == 'pay'){
 		$o = '';
 		if($snack > 0){$o = $o . '<p>Purchased snacks worth $' . $snack/100 . ' from the snack bar.</p>';}
 		if($hotlunch > 0){$o = $o . '<p>Purchased hot lunch(es) worth $' . $hotlunch/100 . ' from the snack bar.</p>';}
+		
+		//echo $TODO . $o . $mainPage;
+		
 		echo $o . $mainPage;
+		
 		unset($_SESSION['std']);
 		exit();
 	}else{
