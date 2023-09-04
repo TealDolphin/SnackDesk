@@ -17,6 +17,7 @@ $_SESSION['state'] = 'ready';
 var page = document.getElementById('main');
 
 function callState(){
+	var ajax = new XMLHttpRequest();
 	var fill = '<div style="display: none">Debug</div>';
 	
 	//ajax.open("GET","control.php?login=yes&name=" + username + "&pwd=" + document.getElementById("pwd").value);
@@ -33,7 +34,9 @@ function callState(){
 }
 
 function submitStudent(){
+	var ajax = new XMLHttpRequest();
 	var stdId = document.getElementById('stdInput').innerHTML;
+	
 	if (stdId.length == 10 && /^[0-9]{10}$/.test(stdId)){
 		ajax.open("GET", "control.php?action=submitStudent&ID=" + stdId);
 		ajax.send();
@@ -54,8 +57,10 @@ function submitStudent(){
 }
 
 function assignStudent(){
+	var ajax = new XMLHttpRequest();
 	var par = document.getElementById('parents').value;
 	var newP = document.getElementById('newPar').innerHTML;
+	
 	if(par == "newParent"){
 		ajax.open("GET", "control.php?action=assignParent&new=" + newP + "&par=" + newP);
 		ajax.send();
