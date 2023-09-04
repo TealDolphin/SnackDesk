@@ -15,7 +15,7 @@ require_once "rebuildSQL.php";
                 $this->DB->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch ( PDOException$e ) {
 				try{
-					rebuild();
+					//rebuild();
 					
 					$this->DB= new PDO( $dataBase, $user, $password );
 					$this->DB->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -204,7 +204,7 @@ require_once "rebuildSQL.php";
 		
 		return 0;
 	}
-	
+	}
 //================== Reference codes to remain commented
 
 //  throw new Exception('Division by zero.');

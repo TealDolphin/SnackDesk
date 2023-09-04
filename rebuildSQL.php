@@ -20,13 +20,20 @@
 */
 function rebuild(){
     // Connect to the mysql instance and make the database
-    mydb = mysql.connector.connect(host="localhost",user="root",passwd=""); //TODO: password
-    mycursor = mydb.cursor();
-    mycursor.execute("CREATE DATABASE snacks");
-    mydb.commit();
+/*  $mydb = mysql.connector.connect(host="localhost",user="root",passwd=""); //TODO: password
+    $mycursor = $mydb.cursor();
+    $mycursor.execute("CREATE DATABASE snacks");
+    $mydb.commit();
+ */
     
-    
-    $conn = new PDO("host=127.0.0.1");
+	$mydb = new PDO("mysql:host=localhost",'root','');
+	
+	$command = "CREATE DATABASE snacks";
+	$stmt->$mydb->prepare($command);
+	
+	$stmt->execute();
+	
+    //$conn = new PDO("host=127.0.0.1");
     
     
     
