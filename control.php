@@ -3,34 +3,39 @@
 /*
 multi line comment
 */
+require_once "rebuildSQL.php";
+require_once "model.php";
 
-$mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" style="margin:auto"></form></div>';
+
+$mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput"></form></div>';
 
 // inital load and anytime i would like to kick back inital page quickly
-if($action == 'load'){
+if($_GET['action'] == 'load'){
 	unset($_SESSION['std']);
 	// return basic page and kick back
 	echo $mainPage;
 	exit();
 }
 
-if($action == 'assignParent'){
-	if(!isset($par)){throw new Exception('Required variables error.');}
-	if(isset($new)){
-		$theDBA->addParent($new);
+if($_GET['action'] == 'assignParent'){
+	if(!isset($_GET['par'])){throw new Exception('Required variables error.');}
+	if(isset($_GET['new'])){
+		$theDBA->addParent($_GET['new']);
 	}
-	$theDBA->assignParent($_SESSION['std'], $par);
-	echo 'ID added to account ' . $par . '<br>';
-	$action == 'submitStudent';
+	$theDBA->assignParent($_SESSION['std'], $_GET['par']);
+	echo 'ID added to account ' . $_GET['par'] . '<br>';
+	$_GET['action'] == 'submitStudent';
 }
 
-if($action == 'submitStudent'){
-	if(!preg_match('/^[0-9]{10}$/', $ID)){
+if($_GET['action'] == 'submitStudent'){
+	if(!isset($_GET['ID'])){throw new Exception('No student error.');}
+	
+	if(!preg_match('/^[0-9]{10}$/', $_GET['ID'])){
 		echo $mainPage . '<p>Incorrect student ID. Please try again.</p>';
 		exit();
 	}
-	$_SESSION['std'] = $ID;
-	$par = $theDBA->retrieveParent($std);
+	$_SESSION['std'] = $_GET['ID'];
+	$par = $theDBA->retrieveParent($_SESSION['std']);
 
 	if($par == 'No parents found for this student.'){
 		$allP = $theDBA->parentsList();
@@ -48,13 +53,13 @@ if($action == 'submitStudent'){
 	}
 }
 
-if($action == 'pay'){
-	if(isset($snack) && isset($hotlunch) && isset($_SESSION['std'])){
+if($_GET['action'] == 'pay'){
+	if(isset($_GET['snack']) && isset($_GET['hotlunch']) && isset($_SESSION['std'])){
 		$par = $theDBA->retrieveParent($_SESSION['std']);
 		
 		// convert to cents for database use
-		$snack = intval($snack*100);
-		$hotlunch = intval($hotlunch*100);
+		$snack = intval($_GET['snack']*100);
+		$hotlunch = intval($_GET['hotlunch']*100);
 		
 		if($par == 'No parents found for this student.'){
 			throw new Exception('Invalid student error.');
@@ -76,7 +81,7 @@ if($action == 'pay'){
 	}
 }
 
-if($action == 'history'){
+if($_GET['action'] == 'history'){
 	if(!isset($_SESSION['std'])){
 		throw new Exception('No student error.');
 	}
