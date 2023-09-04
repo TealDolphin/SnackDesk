@@ -1,19 +1,29 @@
 <?php
+require_once "rebuildSQL.php";
+
 // Quest Science Club
 	class DatabaseAdaptor{
         private $DB; // The instance variable used in every method below
         
         //c:\xampp\mysql\bin\mysql -u root
         public function __construct() {
-            $dataBase= 'mysql:dbname=questchkn;charset=utf8;host=127.0.0.1';
+            $dataBase= 'mysql:dbname=snacks;charset=utf8;host=127.0.0.1';
             $user= 'root';
             $password= ''; //TODO To be determined   DO NOT LEAVE BLANK
             try {
                 $this->DB= new PDO( $dataBase, $user, $password );
                 $this->DB->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                } catch ( PDOException$e ) {
-            echo ('Error establishing Connection');
-            exit();
+            } catch ( PDOException$e ) {
+				try{
+					rebuild();
+					
+					$this->DB= new PDO( $dataBase, $user, $password );
+					$this->DB->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					
+				} catch ( PDOException$e ) {
+					echo ('Error establishing Connection');
+					exit();
+				}
             }
         }
         
