@@ -2,3 +2,8 @@ body{
 	/*Only type of comment*/
 	background-color: lightblue;
 }
+.stdInput{
+	margin-left: 40%;
+	margin-top: 22%;
+	font-size: 35pt;
+}
