@@ -78,52 +78,6 @@ require_once "rebuildSQL.php";
 		$stmt->bindParam(":t", date("Y-m-d H:i:s"), PDO::PARAM_STR);
 		$stmt->execute();
 	}
-
-    public function purchase($std, $snack, $hLunch){
-		$std = htmlspecialchars(trim($std));
-		$snack = htmlspecialchars(trim($snack));
-		$hLunch = htmlspecialchars(trim($hLunch));
-		
-		$par = retrieveParent($std);
-		$value = 0;
-		if($par == 'No parents found for this student.'){
-			throw new Exception('No account found error.');
-		}
-		
-		if($snack > 0){
-			$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, :s, :m, :d, 0)";
-			$stmt->$this->DB->prepare($command);
-			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
-			$stmt->bindParam(":s", $std, PDO::PARAM_STR);
-			$stmt->bindParam(":m", $snack, PDO::PARAM_STR);
-			$stmt->bindParam(":d", date("Y-m-d H:i:s"), PDO::PARAM_STR);
-			
-			$stmt->execute();
-			$value = $value + $snack;
-		}
-		
-		if($hLunch > 0){
-			$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, :s, :m, :d, 1)";
-			$stmt->$this->DB->prepare($command);
-			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
-			$stmt->bindParam(":s", $std, PDO::PARAM_STR);
-			$stmt->bindParam(":m", $hLunch, PDO::PARAM_STR);
-			$stmt->bindParam(":d", date("Y-m-d H:i:s"), PDO::PARAM_STR);
-			
-			$stmt->execute();
-			$value = $value + $hLunch;
-		}
-		
-		if($value > 0){
-			$command = "UPDATE money SET currentMoney = currentMoney - :m WHERE parent = :p";
-			$stmt->$this->DB->prepare($command);
-			$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
-			$stmt->bindParam(":m", $value, PDO::PARAM_STR);
-			$stmt->execute();
-		}
-		
-		return 'success';
-	}
 	
 	public function retrieveParent($std){
 		$std = htmlspecialchars(trim($std));
@@ -139,6 +93,60 @@ require_once "rebuildSQL.php";
 			return $arr[0]['parent'];
 		}
 		return 'No parents found for this student.';
+	}
+	
+	public function purchase($std, $snack, $hLunch){
+		$std = htmlspecialchars(trim($std));
+		$snack = (int)htmlspecialchars(trim($snack));
+		$hLunch = (int)htmlspecialchars(trim($hLunch));
+		
+		$par = $this->retrieveParent($std);
+		$bal = $this->retrieveBal($par);
+		$value = 0;
+		if($par == 'No parents found for this student.'){
+			throw new Exception('No account found error.');
+		}
+		
+		$date = date("Y-m-d H:i:s");
+		
+		if($snack > 0){
+			$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, :s, :m, :d, 0)";
+			$stmt = $this->DB->prepare($command);
+			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
+			$stmt->bindParam(":s", $std, PDO::PARAM_STR);
+			$stmt->bindParam(":m", $snack, PDO::PARAM_STR);
+			$stmt->bindParam(":d", $date, PDO::PARAM_STR);
+			
+			$stmt->execute();
+			$value = $value + $snack;
+		}
+		
+		if($hLunch > 0){
+			$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, :s, :m, :d, 1)";
+			$stmt = $this->DB->prepare($command);
+			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
+			$stmt->bindParam(":s", $std, PDO::PARAM_STR);
+			$stmt->bindParam(":m", $hLunch, PDO::PARAM_STR);
+			$stmt->bindParam(":d", $date, PDO::PARAM_STR);
+			
+			$stmt->execute();
+			$value = $value + $hLunch;
+		}
+		
+		if($value > 0){
+			$m = $bal - $value;
+			
+			//echo "$value-$bal-$par-$std-$snack-$hLunch-$m";
+			
+			$command = "UPDATE money SET currentMoney = :m WHERE parent = :p";
+			$stmt = $this->DB->prepare($command);
+			$stmt->bindParam(":p", $par, PDO::PARAM_STR);
+			$stmt->bindParam(":m", $m, PDO::PARAM_STR);
+			$stmt->execute();
+			//echo "<br>$m-$par";
+		}
+		
+		return 'success';
 	}
 	
 	public function parentsList(){
