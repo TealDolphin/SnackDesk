@@ -3,11 +3,11 @@
 /*
 multi line comment
 */
-require_once "rebuildSQL.php";
+//require_once "rebuildSQL.php";
 require_once "model.php";
+session_start();
 
-
-$mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput"></form></div>';
+static $mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput"></form></div>';
 
 // inital load and anytime i would like to kick back inital page quickly
 if($_GET['action'] == 'load'){
@@ -18,13 +18,19 @@ if($_GET['action'] == 'load'){
 }
 
 if($_GET['action'] == 'assignParent'){
+	
+	//echo $_GET['par'] . '-' . $_GET['new'];
+	
 	if(!isset($_GET['par'])){throw new Exception('Required variables error.');}
 	if(isset($_GET['new'])){
 		$theDBA->addParent($_GET['new']);
+		$_GET['par'] = $_GET['new'];
 	}
 	$theDBA->assignParent($_SESSION['std'], $_GET['par']);
 	echo 'ID added to account ' . $_GET['par'] . '<br>';
-	$_GET['action'] == 'submitStudent';
+	
+	$_GET['action'] = 'submitStudent';
+	$_GET['ID'] = $_SESSION['std'];
 }
 
 if($_GET['action'] == 'submitStudent'){
@@ -40,10 +46,12 @@ if($_GET['action'] == 'submitStudent'){
 	if($par == 'No parents found for this student.'){
 		$allP = $theDBA->parentsList();
 		$options = '<form action="javascript:;" onsubmit="assignStudent()"><label for="parents">Assign student to a Parent:</label><select name="parents", id="parents">';
+		
+		$options = $options . '<option value="newParent">New Parent</option>';
+		
 		foreach($allP as $p){
-			$options = $options . '<>' . $p . '</>';
+			$options = $options . '<option value="' . $p . '">' . $p . '</option>';
 		}
-		$options = $options . '<option value="newParent">New Parent</>';
 		echo '' . $options . '<br><br><label for="newPar">Assign to new parent:</label><input type="text" id="newPar"><br><br><input type="submit" value="Submit"></form>';
 		exit();
 	}else{
@@ -85,7 +93,11 @@ if($_GET['action'] == 'history'){
 	if(!isset($_SESSION['std'])){
 		throw new Exception('No student error.');
 	}
+	echo('Work in progress. Check back later.');
+	exit();
 	// DONOTDO. this is for returning the history of the purchases. low priority if i can get the rest working
+	
+	
 }
 
 /*
