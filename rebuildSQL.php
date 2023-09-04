@@ -18,7 +18,7 @@
 	// assumed that most of the time there will be multiple students per parent, but that is easy to reverse lookup if needed.
 	
 */
-
+function rebuild(){
     // Connect to the mysql instance and make the database
     mydb = mysql.connector.connect(host="localhost",user="root",passwd=""); //TODO: password
     mycursor = mydb.cursor();
@@ -53,11 +53,7 @@
 	mydb.commit();
 
     // build out database with backed up information.
-    
-    
-    
-
-
+}
 
 
 
