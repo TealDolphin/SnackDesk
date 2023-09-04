@@ -53,10 +53,10 @@ function rebuild(){
 	mycursor.execute('CREATE TABLE purchases (ID int NOT NULL AUTO_INCREMENT, parent varchar(60), student bigint, pValue int, pTime datetime, hotLunch tinyint, PRIMARY KEY (ID))');
     mydb.commit();
     
-	mycursor.execute('CREATE TABLE money (ID int NOT NULL AUTO_INCREMENT, parent varchar(60), currentMoney int, PRIMARY KEY (ID)');
+	mycursor.execute('CREATE TABLE money (ID int NOT NULL AUTO_INCREMENT, parent varchar(60), currentMoney int, PRIMARY KEY (ID))');
 	mydb.commit();
 	
-	mycursor.execute('CREATE TABLE people (ID int NOT NULL AUTO_INCREMENT, student bigint, parent varchar(60), PRIMARY KEY (ID)');
+	mycursor.execute('CREATE TABLE people (ID int NOT NULL AUTO_INCREMENT, student bigint, parent varchar(60), PRIMARY KEY (ID))');
 	mydb.commit();
 
     // build out database with backed up information.
