@@ -1,13 +1,41 @@
 <?php
 
 require_once "model.php";
-require_once "JotForm.php";
+require_once "jotform-api-php/JotForm.php";
 
 
-$jotformAPI = new JotForm("YOUR API KEY");
-$forms = $jotformAPI->getForms(0, 1, null, null);
+
+$formID = file_get_contents('formid.env');
+$apiKey = file_get_contents('api.env');
+
+$jotformAPI = new JotForm($apiKey);
 
 
+///*
+$forms = $jotformAPI->getForms();
+    
+    foreach ($forms as $form) {
+        print var_dump($form) . '<br><br>';
+    }
+//*/
+
+
+
+//$forms = $jotformAPI->getForms(0, 1, null, null);
+// retrieve list of forms, but i already have form number
+//echo var_dump($forms[0]);
+
+
+//$submissions = $jotformAPI->getFormSubmissions($formID);
+
+
+//echo var_dump($submissions);
+
+
+
+
+
+/*
 $par = parentsList();
 
 foreach($forms as $arr){
@@ -18,7 +46,7 @@ foreach($forms as $arr){
 		addMoney($forms[0],$forms[1]);
 	}
 }
-
+*/
 
 
 
