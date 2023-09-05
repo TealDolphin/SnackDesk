@@ -2,3 +2,6 @@
 JotForm.php
 *.env
 \jotform-api-php\*
+jotform-api-php/README.md
+jotform-api-php/LICENSE
+jotform-api-php/composer.json
