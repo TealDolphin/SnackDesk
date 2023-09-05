@@ -1,2 +1,4 @@
 
 JotForm.php
+*.env
+\jotform-api-php\*
