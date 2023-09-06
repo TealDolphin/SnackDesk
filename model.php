@@ -46,36 +46,59 @@ require_once "rebuildSQL.php";
 	
 */
 
+
+/*
+	public function test(){
+		
+		$command = "SELECT * FROM money WHERE parent = 'Kevin'";
+		$stmt=$this->DB->prepare($command);
+		//$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
+		
+		$stmt->execute();
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo ($arr[0]['currentMoney']);
+	}
+*/
 	public function addMoney($parent, $value){
 		$parent = htmlspecialchars(trim($parent));
 		$value = htmlspecialchars(trim($value));
 		
 		$command = "SELECT * FROM money WHERE parent = :p";
-		$stmt->$this->DB->prepare($command);
+		$stmt=$this->DB->prepare($command);
 		$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
 		
 		$stmt->execute();
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		if(count($arr) > 0){
-			$command = "UPDATE money SET currentMoney = currentMoney + :m WHERE parent = :p";
-			$stmt->$this->DB->prepare($command);
+			/*
+			$command = "SELECT currentMoney FROM money WHERE parent = :p";
+			$stmt=$this->DB->prepare($command);
 			$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
-			$stmt->bindParam(":m", $value, PDO::PARAM_STR);
+			$stmt->execute();
+			$arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			*/
+			$v = $value + $arr[0]['currentMoney'];
+			
+			$command = "UPDATE money SET currentMoney = :m WHERE parent = :p";
+			$stmt=$this->DB->prepare($command);
+			$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
+			$stmt->bindParam(":m", $v, PDO::PARAM_STR);
 			$stmt->execute();
 		}else{
 			$command = "INSERT INTO money (parent, currentMoney) VALUES (:p, :m)";
-			$stmt->$this->DB->prepare($command);
+			$stmt=$this->DB->prepare($command);
 			$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
 			$stmt->bindParam(":m", $value, PDO::PARAM_STR);
 			$stmt->execute();
 		}
 		
-		$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, -1, :m, :t, 0)";
-		$stmt->$this->DB->prepare($command);
+		$command = "INSERT INTO purchases (parent, student, pValue, pTime, hotLunch) VALUES (:p, -1, :m, :t, 2)";
+		$stmt=$this->DB->prepare($command);
 		$stmt->bindParam(":p", $parent, PDO::PARAM_STR);
 		$stmt->bindParam(":m", $value, PDO::PARAM_STR);
-		$stmt->bindParam(":t", date("Y-m-d H:i:s"), PDO::PARAM_STR);
+		$d = date("Y-m-d H:i:s");
+		$stmt->bindParam(":t", $d, PDO::PARAM_STR);
 		$stmt->execute();
 	}
 	
