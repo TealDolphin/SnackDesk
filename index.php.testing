@@ -16,6 +16,20 @@ $_SESSION['state'] = 'ready';
 
 let page = document.getElementById('main');
 
+
+let ajax = new XMLHttpRequest();
+
+ajax.open("GET", "importPurchases.php");
+ajax.send();
+
+ajax.onreadystatechange = function(){
+	if(ajax.readyState == 4 && ajax.status == 200){
+		page.innerHTML = ajax.responseText;
+	}
+};
+
+
+/*
 function callState(){
 	let ajax = new XMLHttpRequest();
 	
@@ -116,7 +130,9 @@ function pay(){
 }
 
 
-callState();
+callState();*/
+
+
 </script>
 </body>
 </html>
