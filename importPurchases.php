@@ -49,7 +49,7 @@ echo var_dump(array_keys(json_decode($submissions[0]['answers'][6]['answer']['pa
 */
 
 
-$today = date("Y-m-d");
+$today = date("Y-m-d") . ' 11:00:00';
 $last = trim(file_get_contents('lastImportDate.env'));
 
 
@@ -57,8 +57,8 @@ $last = trim(file_get_contents('lastImportDate.env'));
 foreach($submissions as $s){
 	$name = $s['answers'][3]['prettyFormat'];
 	$val = intval(json_decode($s['answers'][6]['answer']['paymentArray'], true)['total'])*100;
-	$d = trim(substr($s['created_at'], 0, 10));
-	//echo $d;
+	$d = trim($s['created_at']);
+	//echo $d . '<br>';
 	// if the date of the submition is between the last added date and today, then add it.
 	if($d >= $last && $d < $today){
 		$theDBA->addMoney($name, $val);
@@ -67,7 +67,7 @@ foreach($submissions as $s){
 	//echo "Name: $name, Total: $val<br>";
 	
 }
-
+///*
 //update the last added date to today.
 $f = fopen('lastImportDate.env', 'w');
 fwrite($f, $today);
