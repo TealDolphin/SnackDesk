@@ -7,7 +7,7 @@ multi line comment
 require_once "model.php";
 session_start();
 
-static $mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()"><input type="text" id="stdInput" class="stdInput" pattern="^[0-9]{10}$"></form></div>';
+static $mainPage = '<div><form action="javascript:;" onsubmit="submitStudent()" ><input type="text" autocomplete="off" placeholder="ID number input" id="stdInput" class="stdInput" pattern="^[0-9]{10}$"></form></div>';
 
 // inital load and anytime i would like to kick back inital page quickly
 if($_GET['action'] == 'load'){
@@ -45,14 +45,14 @@ if($_GET['action'] == 'submitStudent'){
 
 	if($par == 'No parents found for this student.'){
 		$allP = $theDBA->parentsList();
-		$options = '<form action="javascript:;" onsubmit="assignStudent()"><label for="parents">Assign student to a Parent:</label><select name="parents", id="parents">';
+		$options = '<form action="javascript:;" onsubmit="assignStudent()"><label for="parents">Assign ID to a Student:</label><select name="parents", id="parents">';
 		
 		$options = $options . '<option value="newParent">New Parent</option>';
 		
 		foreach($allP as $p){
 			$options = $options . '<option value="' . $p . '">' . $p . '</option>';
 		}
-		echo '' . $options . '<br><br><label for="newPar">Assign to new parent:</label><input type="text" id="newPar"><br><br><input type="submit" value="Submit"></form>';
+		echo '' . $options . '<br><br><label for="newPar">Assign to new student:</label><input type="text" id="newPar"><br><br><input type="submit" value="Submit"></form>';
 		exit();
 	}else{
 	$bal = ($theDBA->retrieveBal($par))/100;

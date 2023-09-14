@@ -85,9 +85,9 @@ function assignStudent(){
 function pay(){
 	let ajax = new XMLHttpRequest();
 	
-	let bal = document.getElementById('bal').value;
-	let snk = document.getElementById('snk').value;
-	let hotl = document.getElementById('hotl').value;
+	let bal = Number(document.getElementById('bal').value);
+	let snk = Number(document.getElementById('snk').value);
+	let hotl = Number(document.getElementById('hotl').value);
 	
 	if(snk === ""){snk = 0;}
 	if(hotl === ""){hotl = 0;}
