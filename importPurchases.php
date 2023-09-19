@@ -52,20 +52,41 @@ echo var_dump(array_keys(json_decode($submissions[0]['answers'][6]['answer']['pa
 $today = date("Y-m-d") . ' 11:00:00';
 $last = trim(file_get_contents('lastImportDate.env'));
 
+echo "$today, $last,<br><br>";
 
 ///*
 foreach($submissions as $s){
 	$name = $s['answers'][3]['prettyFormat'];
-	$val = intval(json_decode($s['answers'][6]['answer']['paymentArray'], true)['total'])*100;
-	$d = trim($s['created_at']);
-	//echo $d . '<br>';
-	// if the date of the submition is between the last added date and today, then add it.
-	if($d >= $last && $d < $today){
-		$theDBA->addMoney($name, $val);
-		//$theDBA->test();
-	}
-	//echo "Name: $name, Total: $val<br>";
+	$data = array_keys($s['answers']);
+	/*	
+	$x = $s['answers'];
+	echo "<br><br>" . var_dump($x[1]) ."<br><br>";
+	echo "<br><br>" . var_dump($x[2]) ."<br><br>";
+	echo "<br><br>" . var_dump($x[3]) ."<br><br>";
+	echo "<br><br>" . var_dump($x[11]) ."<br><br>";
+	$q = $x[6];
+	$w = $q['answer'];
+	$u = $w['paymentArray'];
+	$r = json_decode($u, true);
+	$t = $r['total'];
+	$val = intval($t)*100;
+	*/
 	
+	if(array_key_exists('answer', $s['answers'][$data[3]])){
+		$val = intval(json_decode($s['answers'][$data[3]]['answer']['paymentArray'], true)['total'])*100;
+		$d = trim($s['created_at']);
+		//echo var_dump($s) . '<br><br><br>';
+		//echo var_dump($val) . '<br><br><br>';
+		// if the date of the submition is between the last added date and today, then add it.
+		if($d >= $last && $d < $today){
+			$theDBA->addMoney($name, $val);
+			//$theDBA->test();
+			echo "-<br>";
+		}
+		echo "Name: $name, Total: $val, $d<br>";
+		//echo "<br><br>";
+	}
+	echo "Name: $name<br>";
 }
 ///*
 //update the last added date to today.
