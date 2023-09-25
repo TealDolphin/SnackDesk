@@ -49,6 +49,10 @@ function wipe(){
         }
     };
 }
+
+function kick(){
+    page.innerHTML = "";
+}
 </script>
 </body>
 </html>
