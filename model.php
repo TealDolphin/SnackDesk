@@ -203,6 +203,15 @@ require_once "rebuildSQL.php";
 		}
 	}
 	
+	public function unAssignId($std){
+		$std = htmlspecialchars(trim($std));
+		
+		$command = "DELETE FROM people WHERE student = :s";
+		$stmt = $this->DB->prepare($command);
+		$stmt->bindParam(":s", $std, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
 	public function addParent($par){
 		$par = htmlspecialchars(trim($par));
 		
