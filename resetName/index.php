@@ -20,6 +20,36 @@ $_SESSION['state'] = 'ready';
 
 let page = document.getElementById('main');
 
+
+function request(){
+    let ajax = new XMLHttpRequest();
+
+    
+    
+    ajax.open("GET", "control.php?action=load");
+    ajax.send();
+    
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200){
+            page.innerHTML = ajax.responseText;
+        }
+    };
+}
+
+function wipe(){
+    let ajax = new XMLHttpRequest();
+    
+    
+    ajax.open("GET", "control.php?action=load");
+    ajax.send();
+    
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200){
+            page.innerHTML = ajax.responseText;
+        }
+    };
+}
+
 function callState(){
 	let ajax = new XMLHttpRequest();
 	
