@@ -7,3 +7,18 @@ body{
 	margin-top: 22%;
 	font-size: 35pt;
 }
+.wipeForm{
+	margin-left: 42%;
+	margin-top: 16%
+}
+.wipeID{
+	font-size: 25pt;
+}
+.wipeButton{
+	margin-left: 8%;
+	padding-left: 3%;
+	padding-right: 3%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	font-size: 20pt;
+}
