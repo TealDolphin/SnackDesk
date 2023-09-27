@@ -260,27 +260,28 @@ require_once "rebuildSQL.php";
 		$numbOfStd = 'Number of Purchases:,';
 		$totalSpent ='Amount Spent on Hot Lunch:,';
 		
-		$d = $arr[0]['pTime'];
+		$d = substr($arr[0]['pTime'],0,10);
 		$n = 0;
 		$m = 0;
 		
 		foreach($arr as $row){
-			if($d != $row['pTime']){
+			if($d != substr($row['pTime'],0,10)){
 				$date = $date . $d . ',';
 				$numbOfStd = $numbOfStd . $n . ',';
-				$totalSpent = $totalSpent . '$' . $m . ',';
-				$d = $row['pTime'];
-				$numbOfStd = 0;
-				$totalSpent = 0;
+				$totalSpent = $totalSpent . '"$' . substr($m,0,strlen($m)-2) . '.' . substr($m,-2,2) . '",';
+				$d = substr($row['pTime'],0,10);
+				$n = 0;
+				$m = 0;
 			}
-			$numbOfStd++;
-			$totalSpent = $totalSpent + $row['pValue'];
+			$n++;
+			$m = $m + $row['pValue'];
 		}
 		$date = $date . $d . ',';
 		$numbOfStd = $numbOfStd . $n . ',';
-		$totalSpent = $totalSpent . '$' . $m . ',';
+		// append an entry to total spent formated as $XXXXXX.XX
+		$totalSpent = $totalSpent . '"$' . substr($m,0,strlen($m)-2) . '.' . substr($m,-2,2) . '",';
 		
-		$r = $date . '\n' . $numbOfStd . '\n' . $totalSpent;
+		$r = $date . "\n" . $numbOfStd . "\n" . $totalSpent;
 		echo $r;
 	}
 	
