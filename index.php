@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="template.css" />
-<title>Page Title</title>
+<title>Snack Desk</title>
 </head>
 <body>
 <!-- Comment, both single line and multi line -->

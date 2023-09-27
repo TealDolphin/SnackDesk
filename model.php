@@ -244,6 +244,47 @@ require_once "rebuildSQL.php";
 		
 		return 0;
 	}
+	
+	public function hotLunch(){
+		$now = date("Y-m-d") . ' 25:00:00';
+		$monthAgo = date("Y-m-d", strtotime("-32 day")) . " 00:00:00";
+		
+		$command = "SELECT * FROM purchases WHERE hotLunch = 1 AND pTime > :d ORDER BY pTime ASC";
+		$stmt = $this->DB->prepare($command);
+		$stmt->bindParam(":d", $monthAgo, PDO::PARAM_STR);
+		
+		$stmt->execute();
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		$date = 'Date:,';
+		$numbOfStd = 'Number of Purchases:,';
+		$totalSpent ='Amount Spent on Hot Lunch:,';
+		
+		$d = $arr[0]['pTime'];
+		$n = 0;
+		$m = 0;
+		
+		foreach($arr as $row){
+			if($d != $row['pTime']){
+				$date = $date . $d . ',';
+				$numbOfStd = $numbOfStd . $n . ',';
+				$totalSpent = $totalSpent . '$' . $m . ',';
+				$d = $row['pTime'];
+				$numbOfStd = 0;
+				$totalSpent = 0;
+			}
+			$numbOfStd++;
+			$totalSpent = $totalSpent + $row['pValue'];
+		}
+		$date = $date . $d . ',';
+		$numbOfStd = $numbOfStd . $n . ',';
+		$totalSpent = $totalSpent . '$' . $m . ',';
+		
+		$r = $date . '\n' . $numbOfStd . '\n' . $totalSpent;
+		echo $r;
+	}
+	
+	
 	}
 //================== Reference codes to remain commented
 
