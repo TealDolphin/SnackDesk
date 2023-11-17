@@ -56,8 +56,23 @@ echo "$today, $last,<br><br>";
 
 ///*
 foreach($submissions as $s){
-	$name = $s['answers'][3]['prettyFormat'];
+	$n = explode(" ", trim($s['answers'][3]['prettyFormat']));
 	$data = array_keys($s['answers']);
+	
+	$len = sizeof($n);
+	if($len <= 0){
+		continue;
+	}
+	$name = ucfirst(strtolower(trim($n[0])));
+	$i = 1;
+	while($i < $len){
+		$m = trim($n[$i++]);
+		if($m != ""){
+			$name = $name . " " . ucfirst(strtolower($m));
+		}
+	}
+	
+	
 	/*	
 	$x = $s['answers'];
 	echo "<br><br>" . var_dump($x[1]) ."<br><br>";
